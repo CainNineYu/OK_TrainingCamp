@@ -5,6 +5,7 @@ import "./IUniswapV2Router01.sol";
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "./MasterChef.sol";
 
 contract MyTokenMarket {
     using SafeERC20 for IERC20;
@@ -12,11 +13,13 @@ contract MyTokenMarket {
     address public myToken;
     address public router;
     address public weth;
+    address public spender;
 
-    constructor(address _token, address _router, address _weth) {
+    constructor(address _token, address _router, address _weth,address _spender) {
         myToken = _token;
         router = _router;
         weth = _weth;
+        spender = _spender;
     }
 
     // 添加流动性
@@ -37,8 +40,16 @@ contract MyTokenMarket {
         path[0] = weth;
         path[1] = myToken;
 
-        IUniswapV2Router01(router).swapExactETHForTokens{value : msg.value}(minTokenAmount, path, msg.sender, block.timestamp);
+        IUniswapV2Router01(router).swapExactETHForTokens{value : msg.value}(minTokenAmount, path, address(this), block.timestamp);
+        
+        IERC20(myToken).approve(spender, minTokenAmount);
+        MasterChef(spender).deposit(0, minTokenAmount);
     }
 
+
+    function withdraw(uint256 _amounts) public {
+        //不论传参，直接全部取出
+        MasterChef(spender).withdraw(0, address(this).balance);
+    }
 
 }

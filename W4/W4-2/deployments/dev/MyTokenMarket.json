@@ -1,4 +1,5 @@
 {
   "address": "0x5153D366311113b8471BA0E0B2002CaE6B6207C9",
-  "contractName": "MyTokenMarket"
+  "contractName": "MyTokenMarket",
+  "spender": "0x7e2515C36be3D5AbeeC72eA47d062D6a8Ee27d3a"
 }

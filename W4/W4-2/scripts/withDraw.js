@@ -3,7 +3,7 @@ const myTokenMarket = require(`../deployments/dev/${network.name}-MyTokenMarket.
 
 async function main() {
   const [deployer] = await ethers.getSigners();
-  let tokenMarket = await ethers.getContractAt(myTokenMarket.contractName, myTokenMarket.address, deployer);
+  let tokenMarket = await ethers.getContractAt(myTokenMarket.contractName, myTokenMarket.address, deployer,myTokenMarket.spender);
   await tokenMarket.withdraw(ethers.utils.parseEther('1.2343678236982'));
 }
 
