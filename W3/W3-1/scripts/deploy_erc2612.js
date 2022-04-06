@@ -10,6 +10,8 @@ async function main() {
     await token.deployed();
 
     console.log("ERC2612 deployed to:", token.address);
+    const getAddress1 = await token.getAddress1();
+    console.log("ERC2612 deployed to:", token.getGetMsgSender);
     await writeAddr(token.address, "ERC2612", network.name)
 }
 

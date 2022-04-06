@@ -24,6 +24,7 @@ export default {
       decimal: null,
       symbol: null,
       supply: null,
+      constantAddress: null,
 
       stakeAmount: null,
 
@@ -80,8 +81,13 @@ export default {
       this.erc20Token.symbol().then((r) => {
         this.symbol = r;
       })
+
       this.erc20Token.totalSupply().then((r) => {
         this.supply = ethers.utils.formatUnits(r, 18);
+      })
+
+      this.erc20Token.getAddress().then((r) => {
+      this.constantAddress = r;
       })
 
       this.erc20Token.balanceOf(this.account).then((r) => {
@@ -156,6 +162,7 @@ export default {
         <br /> Token符号 : {{  symbol }}
         <br /> Token精度 : {{  decimal }}
         <br /> Token发行量 : {{  supply }}
+        <br /> 调用合约地址 : {{  constantAddress }}
         <br /> 我的余额 : {{ balance  }}
       </div>
 

@@ -3,17 +3,16 @@ const { writeAddr } = require('./artifact_log.js');
 
 async function main() {
   // await hre.run('compile');
-  const [deployer,deployer1] = await ethers.getSigners();
+  const [deployer] = await ethers.getSigners();
   console.log("Deployer Balance:", (await deployer.getBalance()).toString());
 
   const ERC20Token = await hre.ethers.getContractFactory("ERC20Token");
   const token = await ERC20Token.deploy();
 
   await token.deployed();
-  console.log("Deployer1 Balance:", (await token.balanceOf(deployer1.address)).toString());
   console.log("ERC20Token deployed to:", token.address);
-  console.log("转账:", await token.transfer(deployer1.address,50));
-  console.log("Deployer1 Balance:", (await token.balanceOf(deployer1.address)).toString());
+  const address1 = "0xAA44EED795317c5A190F190F3966E22f561B0b84";
+  console.log("转账:", await token.transfer(address1,500));
   await writeAddr(token.address, "ERC20Token", network.name);
 
 }

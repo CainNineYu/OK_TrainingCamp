@@ -23,10 +23,9 @@ contract Vault {
     }
 
     //提现全部ETH
-    function  withdraw() public onlyOwner {
+    function  withdraw() public  {
         uint256 oldBalance = address(this).balance;
-        payable(owner).transfer(oldBalance);
+        IERC20(token).transfer(msg.sender, oldBalance);
     }
-
 }
 
