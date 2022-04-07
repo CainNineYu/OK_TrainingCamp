@@ -11,8 +11,6 @@ async function main() {
 
   await token.deployed();
   console.log("ERC20Token deployed to:", token.address);
-  const address1 = "0xAA44EED795317c5A190F190F3966E22f561B0b84";
-  console.log("转账:", await token.transfer(address1,500));
   await writeAddr(token.address, "ERC20Token", network.name);
 
 }
