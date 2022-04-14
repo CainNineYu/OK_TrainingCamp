@@ -22,10 +22,10 @@ contract Vault {
         deposited[user] += amount;
     }
 
-    // //提现全部ETH
-    // function  withdraw() public  {
-    //     uint256 oldBalance = address(this).balance;
-    //     IERC20(token).transfer(msg.sender, oldBalance);
-    // }
+    //提现
+    function  withdraw() public  {
+        uint256 oldBalance = address(this).balance;
+        IERC20(token).transfer(msg.sender, oldBalance);
+    }
 }
 

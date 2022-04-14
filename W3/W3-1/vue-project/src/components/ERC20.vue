@@ -24,7 +24,7 @@ export default {
       decimal: null,
       symbol: null,
       supply: null,
-
+      withdrewAmount : null,
       stakeAmount: null,
 
     }
@@ -106,11 +106,47 @@ export default {
       })
     },
 
+    permitWithdraw() {
+      this.deadline = Math.ceil(Date.now() / 1000) + parseInt(20 * 60);
+      
+      let amount =  ethers.utils.parseUnits(this.withdrewAmount).toString();
+
+      let msgParams = premitTypedDate("ERC2612", 
+        erc2612Addr.address,
+        this.account, vaultAddr.address, amount, this.deadline, this.chainId, this.nonce);
+      
+      console.log("msgParams:" + msgParams)
+
+      this.currProvider.sendAsync({
+        method: 'eth_signTypedData_v4',
+        params: [this.account, msgParams],
+        from: this.account
+      }, (err, sign) => {
+        this.sign = sign.result;
+        console.log(this.sign)
+
+        //  椭圆曲线签名签名的值:
+        // r = 签名的前 32 字节
+        // s = 签名的第2个32 字节
+        // v = 签名的最后一个字节
+
+        let r = '0x' + this.sign.substring(2).substring(0, 64);
+        let s = '0x' + this.sign.substring(2).substring(64, 128);
+        let v = '0x' + this.sign.substring(2).substring(128, 130);
+
+        this.vault.permitDeposit(this.account, amount, this.deadline, v, r, s, {
+                from: this.account
+              }).then(() => {
+                this.getInfo();
+                this.getNonce();
+            })
+      });
+    },
+
     permitStake() {
       this.deadline = Math.ceil(Date.now() / 1000) + parseInt(20 * 60);
       
-      let amount =  ethers.utils.parseUnits(this.stakeAmount).toString();
-      
+         let amount =  ethers.utils.parseUnits(this.stakeAmount).toString();
 
       let msgParams = premitTypedDate("ERC2612", 
         erc2612Addr.address,
@@ -168,6 +204,12 @@ export default {
         <br />
         <button @click="transfer()"> 转账 </button>
       </div>
+
+    <div >
+            <button @click="permitWithdraw">提款</button>
+      <input v-model="withdrewAmount" placeholder="提取数量"/>
+
+    </div>
 
     <div >
       <input v-model="stakeAmount" placeholder="输入质押量"/>

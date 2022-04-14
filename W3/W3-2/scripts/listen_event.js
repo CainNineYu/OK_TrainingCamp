@@ -36,12 +36,16 @@ async function main() {
     // logsFrom = await erc20.queryFilter(filter, -10, "latest");
 
     // filter = {
+        //指定监听地址和事件
     //     address: ERC20Addr.address,
     //     topics: [
+        //和topic一样
     //         ethers.utils.id("Transfer(address,address,uint256)")
     //     ]
     // }
 
+
+//实时获取日志信息
     ethers.provider.on(filter, (event) => {
 
       console.log(event)
